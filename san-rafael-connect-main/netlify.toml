@@ -1,0 +1,4 @@
+[build]
+  base = "san-rafael-connect-main"
+  command = "npm run build"
+  publish = "dist"
