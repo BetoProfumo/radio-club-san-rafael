@@ -127,7 +127,7 @@ function useLanguage() {
 
 function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, amount: 0.4 });
   const mv = useMotionValue(0);
   const rounded = useTransform(mv, (v) => Math.floor(v).toLocaleString("es-AR"));
   const [val, setVal] = useState("0");
@@ -140,6 +140,12 @@ function Counter({ to, suffix = "" }: { to: number; suffix?: string }) {
       const c = animate(mv, to, { duration: 1.8, ease: "easeOut" });
       return () => c.stop();
     }
+    // Red de seguridad: si por alguna razón el observer nunca marca el
+    // elemento como visible (viewports chicos, cambios de tamaño en
+    // móvil por la barra de direcciones, etc.), mostramos el valor final
+    // igual después de un segundo para que el número nunca quede en 0.
+    const fallback = setTimeout(() => mv.set(to), 3000);
+    return () => clearTimeout(fallback);
   }, [inView, mv, to]);
   return (
     <span ref={ref}>
@@ -503,7 +509,7 @@ function Stats() {
               key={s.label}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
+              viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: i * 0.06 }}
               className="card-stock relative rounded-md p-5 transition-colors hover:border-primary/50"
             >
@@ -572,7 +578,7 @@ function Radioaficion() {
               key={item.title}
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
+              viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
               className="group relative bg-card p-8 transition-colors hover:bg-secondary"
             >
@@ -656,7 +662,7 @@ function Historia() {
                   key={e.year}
                   initial={{ opacity: 0, x: alignRight ? -20 : 20 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true, margin: "-60px" }}
+                  viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.5 }}
                   className={`relative pl-12 sm:w-1/2 sm:pl-0 ${
                     alignRight ? "sm:pr-10" : "sm:ml-auto sm:pl-10"
@@ -842,7 +848,7 @@ function ExamenEnacom() {
                 key={p.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-60px" }}
+                viewport={{ once: true, amount: 0.3 }}
                 transition={{ duration: 0.5, delay: i * 0.08 }}
                 className="card-stock relative rounded-md p-6"
               >
@@ -946,7 +952,7 @@ function Biblioteca() {
               key={m.title}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-60px" }}
+              viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, delay: i * 0.08 }}
               className="card-stock flex items-start gap-4 rounded-md p-6"
             >
