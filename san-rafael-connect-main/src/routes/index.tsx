@@ -25,9 +25,13 @@ import {
   Shield,
   Heart,
   ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
-import heroImage from "@/assets/hero-antenna.jpg";
+import heroImage from "@/assets/hero-cerro-radio-club.jpg";
 import campingImage from "@/assets/camping-valle-grande.jpg";
+import campingCarrusel1 from "@/assets/camping-carrusel-1.jpg";
+import campingCarrusel2 from "@/assets/camping-carrusel-2.jpg";
+import campingCarrusel3 from "@/assets/camping-carrusel-3.jpg";
 import logo from "@/assets/logo-radio-club.png";
 
 export const Route = createFileRoute("/")({
@@ -457,7 +461,7 @@ function Hero() {
           >
             <img
               src={heroImage}
-              alt="Antena de radio bajo un cielo estrellado sobre las montañas de San Rafael"
+              alt="Cerro del Radio Club San Rafael, sur mendocino"
               width={900}
               height={1100}
               fetchPriority="high"
@@ -467,7 +471,7 @@ function Hero() {
             <div className="absolute inset-x-0 bottom-0 p-6">
               <p className="font-mono-tech text-[10px] uppercase text-background/80">Miembro RCA · IARU R2</p>
               <p className="mt-1 font-display text-lg font-bold text-background">
-                Cordillera de los Andes, sur mendocino
+                Cerro del Radio Club, sur mendocino
               </p>
             </div>
           </motion.div>
@@ -481,11 +485,9 @@ function Hero() {
 
 const STATS = [
   { label: "Años de historia", value: 75, suffix: "+", icon: Award },
-  { label: "Socios activos", value: 240, suffix: "", icon: Users },
+  { label: "Socios activos", value: 100, suffix: "", icon: Users },
   { label: "Cursos realizados", value: 68, suffix: "", icon: GraduationCap },
-  { label: "Repetidoras", value: 6, suffix: "", icon: Antenna },
-  { label: "Activaciones/año", value: 32, suffix: "", icon: Signal },
-  { label: "Emergencias asistidas", value: 120, suffix: "+", icon: Shield },
+  { label: "Repetidoras", value: 2, suffix: "", icon: Antenna },
 ];
 
 function Stats() {
@@ -503,7 +505,7 @@ function Stats() {
           </p>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
           {STATS.map((s, i) => (
             <motion.div
               key={s.label}
@@ -990,9 +992,8 @@ function Biblioteca() {
 /* ---------- Repetidoras (preview) ---------- */
 
 const REPEATERS = [
-  { name: "Cerro Nevado", freq: "146.940", offset: "-600", tone: "88.5", status: "operativa" },
-  { name: "Cerro Diamante", freq: "147.220", offset: "+600", tone: "123.0", status: "operativa" },
-  { name: "Valle Grande", freq: "145.310", offset: "-600", tone: "88.5", status: "mantenimiento" },
+  { name: "Cerro Diamante", freq: "147.210", offset: "+600", tone: "110.9", status: "operativa" },
+  { name: "Ciudad de San Rafael", freq: "147.060", offset: "+600", tone: "—", status: "operativa" },
 ];
 
 function Repetidoras() {
@@ -1010,7 +1011,7 @@ function Repetidoras() {
           </p>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2">
           {REPEATERS.map((r, i) => {
             const ok = r.status === "operativa";
             return (
@@ -1146,6 +1147,76 @@ function Propagacion() {
 
 /* ---------- Camping ---------- */
 
+function CampingCarousel() {
+  const images = [
+    { src: campingImage, alt: "Camping del Radio Club San Rafael en Valle Grande, sobre el río Atuel" },
+    { src: campingCarrusel1, alt: "Río en Valle Grande, San Rafael, atardecer" },
+    { src: campingCarrusel2, alt: "Costa del río en Valle Grande con playa de piedras" },
+    { src: campingCarrusel3, alt: "Puesta de sol sobre el río en Valle Grande" },
+  ];
+  const [index, setIndex] = useState(0);
+  const go = (dir: 1 | -1) => setIndex((i) => (i + dir + images.length) % images.length);
+
+  return (
+    <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-border shadow-elevated">
+      {images.map((img, i) => (
+        <img
+          key={img.src}
+          src={img.src}
+          alt={img.alt}
+          width={900}
+          height={675}
+          loading={i === 0 ? "eager" : "lazy"}
+          className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-500 ${
+            i === index ? "opacity-100" : "opacity-0"
+          }`}
+        />
+      ))}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-5 py-4">
+        <div>
+          <p className="font-mono-tech text-xs uppercase text-white/70">Ubicación</p>
+          <p className="font-display text-sm font-bold text-white">
+            Valle Grande · Cañón del Atuel
+          </p>
+        </div>
+        <MapPin className="h-5 w-5 text-white" />
+      </div>
+
+      {/* Controles del carrusel */}
+      <button
+        type="button"
+        onClick={() => go(-1)}
+        aria-label="Foto anterior"
+        className="absolute left-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-black/40 text-white transition-colors hover:bg-black/60"
+      >
+        <ChevronLeft className="h-4 w-4" />
+      </button>
+      <button
+        type="button"
+        onClick={() => go(1)}
+        aria-label="Foto siguiente"
+        className="absolute right-3 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-full bg-black/40 text-white transition-colors hover:bg-black/60"
+      >
+        <ChevronRight className="h-4 w-4" />
+      </button>
+      <div className="absolute top-3 left-1/2 flex -translate-x-1/2 gap-1.5">
+        {images.map((img, i) => (
+          <button
+            key={img.src}
+            type="button"
+            onClick={() => setIndex(i)}
+            aria-label={`Ir a la foto ${i + 1}`}
+            className={`h-1.5 rounded-full transition-all ${
+              i === index ? "w-5 bg-white" : "w-1.5 bg-white/50"
+            }`}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function Camping() {
   return (
     <section id="camping" className="relative overflow-hidden border-b border-border bg-surface-elevated py-24">
@@ -1153,7 +1224,7 @@ function Camping() {
         <div>
           <p className="font-mono-tech text-xs font-semibold uppercase text-primary">09 — Camping Valle Grande</p>
           <h2 className="mt-3 font-display text-3xl font-bold text-foreground sm:text-4xl">
-            Nuestro predio en la cordillera
+            Naturaleza y río en Valle Grande
           </h2>
           <p className="mt-4 max-w-lg text-muted-foreground">
             Un espacio único para socios y familia sobre el Cañón del Atuel: activaciones portables,
@@ -1173,26 +1244,7 @@ function Camping() {
           </div>
         </div>
 
-        <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-border shadow-elevated">
-          <img
-            src={campingImage}
-            alt="Camping del Radio Club San Rafael en Valle Grande, sobre el río Atuel"
-            width={900}
-            height={675}
-            loading="lazy"
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/5 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 flex items-center justify-between px-5 py-4">
-            <div>
-              <p className="font-mono-tech text-xs uppercase text-white/70">Ubicación</p>
-              <p className="font-display text-sm font-bold text-white">
-                Valle Grande · Cañón del Atuel
-              </p>
-            </div>
-            <MapPin className="h-5 w-5 text-white" />
-          </div>
-        </div>
+        <CampingCarousel />
       </div>
     </section>
   );
@@ -1251,11 +1303,43 @@ function Socios() {
 const CONTACT_ROWS = [
   { icon: MapPin, label: "Sede social", value: "Venezuela 87, San Rafael — Mendoza" },
   { icon: Mail, label: "Correo", value: "lu9mabsanrafael@yahoo.com.ar" },
-  { icon: Phone, label: "WhatsApp", value: "+54 260 400-0000" },
+  { icon: Phone, label: "WhatsApp", value: "+54 9 260 440-0601" },
   { icon: Clock, label: "Horario de secretaría", value: "Sábados 18 a 21 h" },
 ];
 
+const CLUB_PHONE_INTL = "5492604400601"; // +54 9 2604400601, formato para wa.me
+const CLUB_EMAIL = "lu9mabsanrafael@yahoo.com.ar";
+
 function Contacto() {
+  const formRef = useRef<HTMLFormElement>(null);
+
+  const sendVia = (via: "whatsapp" | "email") => {
+    const form = formRef.current;
+    if (!form) return;
+    if (!form.reportValidity()) return; // respeta los "required" del formulario
+
+    const fd = new FormData(form);
+    const nombre = String(fd.get("nombre") || "");
+    const indicativo = String(fd.get("indicativo") || "");
+    const email = String(fd.get("email") || "");
+    const mensaje = String(fd.get("mensaje") || "");
+
+    const cuerpo = [
+      `Nombre: ${nombre}${indicativo ? ` (${indicativo})` : ""}`,
+      `Correo de contacto: ${email}`,
+      "",
+      mensaje,
+    ].join("\n");
+
+    if (via === "whatsapp") {
+      const texto = `Radiograma - Mensaje al club\n\n${cuerpo}`;
+      window.open(`https://wa.me/${CLUB_PHONE_INTL}?text=${encodeURIComponent(texto)}`, "_blank");
+    } else {
+      const asunto = `Radiograma - Mensaje al club de ${nombre || "un radioaficionado"}`;
+      window.location.href = `mailto:${CLUB_EMAIL}?subject=${encodeURIComponent(asunto)}&body=${encodeURIComponent(cuerpo)}`;
+    }
+  };
+
   return (
     <section id="contacto" className="relative bg-surface-elevated py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -1316,7 +1400,7 @@ function Contacto() {
                 <span className="hidden sm:inline">Instagram</span>
               </a>
               <a
-                href="https://wa.me/542604000000"
+                href={`https://wa.me/${CLUB_PHONE_INTL}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="WhatsApp"
@@ -1330,6 +1414,7 @@ function Contacto() {
 
           {/* Radiogram-style message form */}
           <motion.form
+            ref={formRef}
             onSubmit={(e) => e.preventDefault()}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1356,6 +1441,7 @@ function Contacto() {
                   <input
                     required
                     type="text"
+                    name="nombre"
                     maxLength={80}
                     className="border-b border-border bg-transparent pb-2 text-sm text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-primary"
                     placeholder="Tu nombre"
@@ -1367,6 +1453,7 @@ function Contacto() {
                   </span>
                   <input
                     type="text"
+                    name="indicativo"
                     maxLength={20}
                     className="border-b border-border bg-transparent pb-2 text-sm text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-primary"
                     placeholder="LU9XYZ"
@@ -1381,6 +1468,7 @@ function Contacto() {
                 <input
                   required
                   type="email"
+                  name="email"
                   maxLength={120}
                   className="border-b border-border bg-transparent pb-2 text-sm text-foreground outline-none placeholder:text-muted-foreground/60 focus:border-primary"
                   placeholder="tu@correo.com"
@@ -1393,6 +1481,7 @@ function Contacto() {
                 </span>
                 <textarea
                   required
+                  name="mensaje"
                   rows={5}
                   maxLength={1000}
                   className="resize-none rounded-sm border border-border bg-background px-3 py-2.5 text-foreground outline-none placeholder:text-muted-foreground focus:border-primary"
@@ -1400,13 +1489,24 @@ function Contacto() {
                 />
               </label>
 
-              <button
-                type="submit"
-                className="inline-flex items-center justify-center gap-2 rounded-sm bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
-              >
-                Transmitir mensaje
-                <Send className="h-4 w-4" />
-              </button>
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <button
+                  type="button"
+                  onClick={() => sendVia("whatsapp")}
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-sm bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:-translate-y-0.5"
+                >
+                  <Phone className="h-4 w-4" />
+                  Enviar por WhatsApp
+                </button>
+                <button
+                  type="button"
+                  onClick={() => sendVia("email")}
+                  className="inline-flex flex-1 items-center justify-center gap-2 rounded-sm border border-border bg-surface px-5 py-3 text-sm font-semibold text-foreground transition-colors hover:bg-secondary"
+                >
+                  <Mail className="h-4 w-4" />
+                  Enviar por correo
+                </button>
+              </div>
             </div>
           </motion.form>
         </div>
