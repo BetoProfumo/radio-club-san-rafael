@@ -397,8 +397,8 @@ function Hero() {
           >
             <CardTicks />
             <div className="flex flex-wrap items-start justify-between gap-4">
-              <div className="flex items-center gap-3">
-                <LogoBadge size={56} />
+              <div className="flex items-center gap-4">
+                <LogoBadge size={84} className="shrink-0" />
                 <div>
                   <p className="font-mono-tech text-[11px] uppercase text-muted-foreground">Confirmando contacto</p>
                   <p className="font-display text-2xl font-bold text-foreground">Radio Club San Rafael</p>
@@ -457,11 +457,11 @@ function Hero() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="relative hidden overflow-hidden rounded-lg border border-border shadow-elevated lg:block"
+            className="relative aspect-[4/3] overflow-hidden rounded-lg border border-border shadow-elevated lg:aspect-auto lg:h-full"
           >
             <img
               src={heroImage}
-              alt="Cerro del Radio Club San Rafael, sur mendocino"
+              alt="Cerro Diamante, 2450 SNM, locación de la repetidora del Radio Club San Rafael"
               width={900}
               height={1100}
               fetchPriority="high"
@@ -471,7 +471,7 @@ function Hero() {
             <div className="absolute inset-x-0 bottom-0 p-6">
               <p className="font-mono-tech text-[10px] uppercase text-background/80">Miembro RCA · IARU R2</p>
               <p className="mt-1 font-display text-lg font-bold text-background">
-                Cerro del Radio Club, sur mendocino
+                Foto Cerro Diamante 2450 SNM - locación de la repetidora 147.210 +600 ST 110.9
               </p>
             </div>
           </motion.div>
